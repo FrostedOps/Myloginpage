@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard">
+
+<div class="dashboard-container">
+
+<h2>Generate Key</h2>
+<form method="POST" action="/generate_key">
+<select name="duration">
+<option value="day">Day</option>
+<option value="week">Week</option>
+<option value="month">Month</option>
+<option value="year">Year</option>
+<option value="lifetime">Lifetime</option>
+</select>
+<button>Generate</button>
+</form>
+
+<h2>Keys</h2>
+<ul>
+{% for k in keys %}
+<li>{{ k[0] }} | Used: {{ k[2] }} | {{ k[4] }}</li>
+{% endfor %}
+</ul>
+
+<h2>Users</h2>
+<ul>
+{% for u in users %}
+<li>
+{{ u[0] }} |
+{{ "Locked" if u[4] else "Active" }} |
+{{ u[5] }}
+
+<a href="/toggle_lock/{{ u[0] }}">Lock</a>
+<a href="/reset_pw/{{ u[0] }}">Reset</a>
+<a href="/extend/{{ u[0] }}/month">Extend</a>
+<a href="/delete_user/{{ u[0] }}">Delete</a>
+</li>
+{% endfor %}
+</ul>
+
+</div>
+</body>
+</html>

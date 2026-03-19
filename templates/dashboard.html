@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard">
+
+<div class="dashboard-container">
+<h1>Welcome {{ username }}</h1>
+
+<div class="card">
+<h3>OSINT Tool</h3>
+<p>Ready for API integration</p>
+</div>
+
+<a href="/admin">Admin</a>
+<a href="/logout">Logout</a>
+
+</div>
+</body>
+</html>
