@@ -1,59 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <div class="container">
-<h2>Login</h2>
-<form id="loginForm">
-<input name="username" placeholder="Username">
-<input name="password" type="password" placeholder="Password">
-<input type="submit" value="Login">
-</form>
-<button id="openModal">Register</button>
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input name="username" placeholder="Username">
+    <input name="password" type="password" placeholder="Password">
+    <input type="submit" value="Login">
+  </form>
+  <button id="openModal">Register</button>
 </div>
 
-<div id="modal" class="modal">
-<div class="modal-content">
-<span id="close">&times;</span>
-<h2>Register</h2>
-<form id="registerForm">
-<input name="username" placeholder="Username">
-<input name="email" placeholder="Email">
-<input name="password" type="password" placeholder="Password">
-<input name="reg_key" placeholder="Your Key">
-<input type="submit" value="Register">
-</form>
-</div>
+<!-- Register Modal -->
+<div id="modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span id="close" style="cursor:pointer;">&times;</span>
+    <h2>Register</h2>
+    <form id="registerForm">
+      <input name="username" placeholder="Username">
+      <input name="email" placeholder="Email">
+      <input name="password" type="password" placeholder="Password">
+      <input name="reg_key" placeholder="Your Key">
+      <input type="submit" value="Register">
+    </form>
+  </div>
 </div>
 
 <script>
-const modal = document.getElementById("modal");
-const openModal = document.getElementById("openModal");
-const close = document.getElementById("close");
+document.addEventListener("DOMContentLoaded", function() {
+  const modal = document.getElementById("modal");
+  const openModal = document.getElementById("openModal");
+  const close = document.getElementById("close");
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
 
-openModal.onclick = () => modal.style.display = "block";
-close.onclick = () => modal.style.display = "none";
-window.onclick = (e) => { if(e.target==modal) modal.style.display="none"; }
+  // Open modal
+  openModal.onclick = () => modal.style.display = "block";
 
-document.getElementById("loginForm").onsubmit = async e=>{
-  e.preventDefault();
-  const r = await fetch("/login",{method:"POST",body:new FormData(loginForm)});
-  const d = await r.json();
-  if(d.status==="success") location="/dashboard";
-  else alert("Login failed!");
-}
+  // Close modal
+  close.onclick = () => modal.style.display = "none";
 
-document.getElementById("registerForm").onsubmit = async e=>{
-  e.preventDefault();
-  const r = await fetch("/register_user",{method:"POST",body:new FormData(registerForm)});
-  const d = await r.json();
-  if(d.status==="success"){
-    alert("Registered successfully!"); modal.style.display="none";
-  } else { alert("Error: "+(d.message||"Registration failed")); }
-}
+  // Click outside modal closes it
+  window.onclick = (e) => { if(e.target == modal) modal.style.display = "none"; }
+
+  // Login form
+  loginForm.onsubmit = async e => {
+    e.preventDefault();
+    const r = await fetch("/login", { method:"POST", body:new FormData(loginForm) });
+    const d = await r.json();
+    if(d.status==="success") location="/dashboard";
+    else alert("Login failed!");
+  }
+
+  // Register form
+  registerForm.onsubmit = async e => {
+    e.preventDefault();
+    const r = await fetch("/register_user", { method:"POST", body:new FormData(registerForm) });
+    const d = await r.json();
+    if(d.status==="success"){
+      alert("Registered successfully!"); 
+      modal.style.display = "none";
+    } else {
+      alert("Error: "+(d.message||"Registration failed"));
+    }
+  }
+});
 </script>
 </body>
 </html>
